@@ -1,25 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Form Validation</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-  <div class="form-container">
-    <h2>User Registration</h2>
-    <div id="message"></div>
-    <form id="registrationForm">
-      <input type="text" id="name" placeholder="Full Name" required />
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="tel" id="phone" placeholder="Phone (10 digits)" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <label><input type="checkbox" id="togglePassword" /> Show Password</label>
-      <button type="submit">Register</button>
-    </form>
-  </div>
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Validation</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>User Registration</h2>
+      <div id="message"></div>
+      <form id="registrationForm" onsubmit="return validateForm()">
+        <input type="text" id="name" placeholder="Full Name" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <!-- Phone Number Field -->
+        <input
+          type="text"
+          id="phone"
+          name="phone"
+          maxlength="10"
+          placeholder="Phone Number"
+          oninput="validatePhone()"
+        />
+        <span id="phone-error" class="error"></span><br />
+        <!-- Password Fields -->
+        <input type="password" id="password" name="password" placeholder="Password" /><br />
+
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          oninput="checkPasswords()"
+        /><br />
+        <span id="password-error" class="error"></span><br />
+
+        <label
+          ><input type="checkbox" id="togglePassword" /> Show Password</label
+        >
+        <button type="submit">Register</button>
+      </form>
+    </div>
+    <script>
+      // Allow only digits in phone input
+      const validatePhone = () => {
+        const phoneField = document.getElementById("phone");
+        phoneField.value = phoneField.value.replace(/\D/g, "").slice(0, 10); // keep only digits & max 10
+      };
+
+      // Check if passwords match
+      const checkPasswords = () => {
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+        const errorField = document.getElementById("password-error");
+
+        if (confirmPassword && password !== confirmPassword) {
+          errorField.textContent = "Passwords do not match";
+        } else {
+          errorField.textContent = "";
+        }
+      };
+
+      // Final form validation
+      const validateForm = () => {
+        const phone = document.getElementById("phone").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+        const phoneError = document.getElementById("phone-error");
+        const passwordError = document.getElementById("password-error");
+
+        if (phone.length !== 10) {
+          phoneError.textContent = "Phone number must be exactly 10 digits";
+          return false;
+        } else {
+          phoneError.textContent = "";
+        }
+
+        if (password !== confirmPassword) {
+          passwordError.textContent = "Passwords do not match";
+          return false;
+        }
+        return true;
+      };
+    </script>
+    <script src="script.js"></script>
+  </body>
 </html>
