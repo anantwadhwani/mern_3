@@ -13,6 +13,13 @@ $(document).ready(function () {
     return passwordRegex.test(password);
   }
 
+  function doPasswordsMatch(password, confirmPassword, passwordError) {
+    if (password !== confirmPassword) {
+      passwordError.textContent = "Passwords do not match";
+      return false;
+    }
+  }
+
   $('#togglePassword').on('change', function () {
     const type = $(this).is(':checked') ? 'text' : 'password';
     $('#password').attr('type', type);
@@ -24,6 +31,8 @@ $(document).ready(function () {
     const email = $('#email').val().trim();
     const phone = $('#phone').val().trim();
     const password = $('#password').val();
+    const confirmPassword = $('#confirmPassword').val();
+    const passwordError = $('#password-error').val();
 
     if (!name || !email || !phone || !password) {
       showMessage("All fields are required.", "error");
@@ -42,6 +51,11 @@ $(document).ready(function () {
 
     if (!isValidPassword(password)) {
       showMessage("Password must be at least 6 characters, contain uppercase, lowercase, and a number.", "error");
+      return;
+    }
+
+    if(!doPasswordsMatch(password, confirmPassword, passwordError)) {
+      showMessage("Passwords do not match", "error");
       return;
     }
 
