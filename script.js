@@ -14,9 +14,12 @@ $(document).ready(function () {
   }
 
   function doPasswordsMatch(password, confirmPassword, passwordError) {
-    if (password !== confirmPassword) {
+    if (confirmPassword && password !== confirmPassword) {
       passwordError.textContent = "Passwords do not match";
       return false;
+    } else {
+      passwordError.textContent = "";
+      return true;
     }
   }
 
